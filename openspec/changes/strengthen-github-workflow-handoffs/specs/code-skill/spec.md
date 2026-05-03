@@ -1,16 +1,4 @@
-## Purpose
-Define how `/apply` gathers implementation context before working through a change's tasks.
-## Requirements
-### Requirement: Read tests directory as implementation context
-The system SHALL check for `openspec/changes/<name>/tests/` before starting implementation through `/apply` and use its contents as context to guide each task's implementation.
-
-#### Scenario: Tests directory exists
-- **WHEN** `/apply` starts and `openspec/changes/<name>/tests/` exists
-- **THEN** the skill reads all test files and uses them as implementation context for each task
-
-#### Scenario: Tests directory does not exist
-- **WHEN** `/apply` starts and no `tests/` directory is found
-- **THEN** the skill proceeds with implementation using only proposal, design, and tasks artifacts
+## MODIFIED Requirements
 
 ### Requirement: Hand off to /review after implementation
 The `/apply` skill SHALL direct users to publish or update GitHub PR evidence before `/review` when the change is GitHub-backed, and SHALL NOT imply the change is ready to archive.
