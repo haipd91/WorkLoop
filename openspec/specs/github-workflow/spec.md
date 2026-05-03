@@ -1,6 +1,5 @@
 ## Purpose
 Define how GitHub Issues, Pull Requests, branches, commits, and OpenSpec artifacts form the durable WorkLoop delivery record.
-
 ## Requirements
 ### Requirement: GitHub source of truth
 WorkLoop SHALL treat the GitHub repository as the durable source of truth for delivery state, including issue intent, pull request review state, committed OpenSpec artifacts, and merge/archive history.
@@ -51,7 +50,7 @@ WorkLoop SHALL define branch and pull request conventions that connect GitHub wo
 - **THEN** the PR body MUST summarize the problem, approach, verification, linked issue, and relevant OpenSpec change path
 
 ### Requirement: Quality gates
-WorkLoop SHALL define quality gates before PR readiness, merge, and OpenSpec archive.
+WorkLoop SHALL define quality gates before PR readiness, merge, and OpenSpec archive, with Codex owning operational execution and the human owning final material risk or release approval.
 
 #### Scenario: PR readiness gate
 - **WHEN** a PR is marked ready for review
@@ -64,3 +63,11 @@ WorkLoop SHALL define quality gates before PR readiness, merge, and OpenSpec arc
 #### Scenario: Local-only exception
 - **WHEN** a change intentionally skips GitHub issue or PR tracking
 - **THEN** the workflow MUST record explicit human acceptance and residual risk before review or archive treats the missing GitHub evidence as non-blocking
+
+#### Scenario: Human approves release risk
+- **WHEN** Codex has completed issue, PR, review, sync, and merge gate checks for a GitHub-backed change
+- **THEN** the human approval needed to proceed MUST be limited to material risk or release acceptance unless GitHub branch protection requires a separate reviewer approval
+
+#### Scenario: Codex owns mechanical workflow steps
+- **WHEN** a workflow step is mechanical and all required gates are satisfied
+- **THEN** Codex MUST perform that step without asking the human to operate GitHub or OpenSpec manually
