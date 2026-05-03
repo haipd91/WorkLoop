@@ -44,6 +44,8 @@ If PR target is unclear, ask for the PR.
    - approvals
    - resolved/outdated state when available
 4. Read CI/check state when exposed by GitHub MCP/plugin.
+   - If no required checks or statuses are exposed for the PR head commit, classify checks as N/A instead of a blocker.
+   - If required checks are failing or pending, classify them as CI/check blockers.
 5. Classify feedback:
    - blocking actionable
    - non-blocking actionable
@@ -51,6 +53,7 @@ If PR target is unclear, ask for the PR.
    - ambiguous
    - already resolved or outdated
    - CI/check blocker
+   - checks N/A
 6. Produce an action plan.
 7. Return the handoff.
 

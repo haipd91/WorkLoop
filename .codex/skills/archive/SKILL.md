@@ -81,6 +81,8 @@ Archive a completed change in the experimental workflow.
    blocking_findings: none
    reviewed_ref: <git HEAD>
    reviewed_diff: <sha256 fingerprint>
+   reviewed_implementation_diff: <sha256 implementation fingerprint>
+   reviewed_paths_excluded: openspec/changes/<name>/review.md
    reviewed_at: <ISO-8601 timestamp>
    ```
 
@@ -89,11 +91,14 @@ Archive a completed change in the experimental workflow.
    - `blocking_findings`
    - `reviewed_ref`
    - `reviewed_diff`
+   - `reviewed_implementation_diff`
+   - `reviewed_paths_excluded`
    - `reviewed_at`
 
    Accepted values:
    - `verdict`: only `pass` allows archive
    - `blocking_findings`: only `none` allows archive
+   - `reviewed_paths_excluded`: exactly `openspec/changes/<name>/review.md`
 
    **Block archive when:**
    - required metadata is missing
@@ -106,9 +111,14 @@ Archive a completed change in the experimental workflow.
    ```bash
    git rev-parse HEAD
    (git diff --binary && git diff --cached --binary) | shasum -a 256
+   (git diff --binary -- . ':(exclude)openspec/changes/<name>/review.md' && git diff --cached --binary -- . ':(exclude)openspec/changes/<name>/review.md') | shasum -a 256
    ```
 
-   If current ref/diff differs from `reviewed_ref` or `reviewed_diff`, block archive and tell the user to rerun `/review <name>`.
+   Use `reviewed_ref` and `reviewed_diff` for traceability and legacy diagnostics. The stale gate MUST compare the current implementation fingerprint against `reviewed_implementation_diff`, excluding only the path in `reviewed_paths_excluded`.
+
+   If the implementation fingerprint matches, continue even when `HEAD` differs from `reviewed_ref` because the only post-review change is `openspec/changes/<name>/review.md`.
+
+   If the implementation fingerprint differs, block archive and tell the user to rerun `/review <name>`.
 
    Before proceeding, show:
    - review verdict

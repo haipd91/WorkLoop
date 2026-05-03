@@ -50,7 +50,10 @@ Apply tasks from an OpenSpec change.
    - If `state: "blocked"` (missing artifacts): show the missing artifacts and stop. Suggest the exact previous workflow step instead:
      - missing proposal/specs/design/tasks -> run `/propose <name>` or `/design <name>` as appropriate
      - missing tests -> run `/tdd <name>` or get explicit human approval to skip test generation for this change
-   - If `state: "all_done"`: confirm implementation is complete. For GitHub-backed changes, suggest `/github:create-pr <name>` before `/review`. For explicit local-only changes, suggest `/review <name>` and record that GitHub issue/PR evidence was intentionally skipped.
+   - If `state: "all_done"`: confirm implementation is complete, then choose the next handoff:
+     - GitHub-backed change -> suggest `/github:create-pr <name>`
+     - Local-only change with explicit accepted GitHub exception -> suggest `/review <name>`
+     - If unclear whether GitHub applies -> ask before suggesting a next command
    - Otherwise: proceed to implementation
 
 4. **Read context files**
@@ -91,8 +94,12 @@ Apply tasks from an OpenSpec change.
    Display:
    - Tasks completed this session
    - Overall progress: "N/M tasks complete"
-   - If all done: for GitHub-backed changes, suggest `/github:create-pr <name>` before `/review`; for explicit local-only changes, suggest `/review <name>` and record the accepted GitHub evidence bypass.
+   - If all done: suggest the correct next command:
+     - `/github:create-pr <name>` for GitHub-backed changes
+     - `/review <name>` only for local-only changes with explicit accepted GitHub exception
    - If paused: explain why and wait for guidance
+
+   Treat a change as GitHub-backed when any context artifact contains a GitHub issue/PR URL, an explicit linked issue, or specs/docs requiring the GitHub-backed workflow. Do not blindly repeat the generic OpenSpec CLI instruction if it conflicts with the GitHub-backed handoff order.
 
 **Output During Implementation**
 
@@ -122,9 +129,9 @@ Working on task 4/7: <task description>
 - [x] Task 2
 ...
 
-All tasks complete. For GitHub-backed changes, run `/github:create-pr <change-name>` before `/review <change-name>`.
+All tasks complete. Run `/github:create-pr <change-name>` next for GitHub-backed changes.
 
-If the human explicitly accepted local-only work, run `/review <change-name>` and record that GitHub issue/PR evidence was intentionally skipped.
+For local-only changes with explicit accepted GitHub exception, run `/review <change-name>` before archive.
 ```
 
 **Output On Pause (Issue Encountered)**
