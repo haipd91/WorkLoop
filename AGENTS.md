@@ -65,4 +65,12 @@ For multi-step tasks, state a brief plan:
 
 If verification cannot be run, say why and state the remaining risk.
 
+## 5. Vietnamese by Default
+
+Use Vietnamese with diacritics by default.
+
+- User-facing replies: Vietnamese with diacritics.
+- New or edited natural-language file content: Vietnamese with diacritics.
+- Exception: user requests another language, or existing/code/log/API/quoted text should stay unchanged.
+
 These guidelines are working if: diffs are smaller, fewer unrelated changes appear, clarifying questions happen before mistakes, and verification becomes routine.

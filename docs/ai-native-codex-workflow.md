@@ -15,6 +15,8 @@
 
 - Artifact-driven, không chat-driven.
 - Spec trước code.
+- Khi vận hành với GitHub, repo GitHub là source of truth durable; xem `docs/github-source-of-truth-workflow.md`.
+- Khi cần thao tác GitHub thực tế quanh OpenSpec, dùng GitHub orchestration skills; xem `docs/github-orchestration-workflow.md`.
 - Design và test intent phải rõ trước implementation.
 - Task phải nhỏ, có thể review, test, rollback.
 - AI được quyền tăng tốc phân tích và thực thi, nhưng không được tự chốt scope/risk thay human.
