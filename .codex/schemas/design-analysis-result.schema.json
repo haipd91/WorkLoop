@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentica.local/schemas/design-analysis-result.schema.json",
+  "title": "DesignAnalysisResult",
+  "description": "Structured output contract for specialist agents used by the /design orchestrator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scope_analyzed",
+    "findings",
+    "impacted_areas",
+    "assumptions",
+    "risks",
+    "unresolved_questions",
+    "recommended_decisions"
+  ],
+  "properties": {
+    "scope_analyzed": {
+      "description": "Short summary of the artifacts, modules, or workflow surface the specialist reviewed.",
+      "type": "string",
+      "minLength": 1
+    },
+    "findings": {
+      "description": "Concrete specialist findings tied to the agent's assigned responsibility.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "impacted_areas": {
+      "description": "Files, modules, workflows, artifacts, or systems affected from this specialist's perspective.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/textItem"
+      }
+    },
+    "assumptions": {
+      "description": "Assumptions made because source artifacts did not fully specify the answer.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/textItem"
+      }
+    },
+    "risks": {
+      "description": "Risks or trade-offs discovered by the specialist.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/risk"
+      }
+    },
+    "unresolved_questions": {
+      "description": "Questions the orchestrator or human reviewer must resolve or explicitly accept.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/textItem"
+      }
+    },
+    "recommended_decisions": {
+      "description": "Specific decisions the specialist recommends the orchestrator record or apply.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recommendedDecision"
+      }
+    }
+  },
+  "$defs": {
+    "textItem": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "description"
+          ],
+          "properties": {
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "detail"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mitigation": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "recommendedDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "rationale"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+schema: spec-driven-custom
+
+context: |
+  This repository defines a team-oriented AI software delivery workflow.
+  Core principles:
+  - Artifact-driven, not chat-driven
+  - Spec before code
+  - Human owns final technical decisions and risk acceptance
+  - Tasks must be small, reviewable, testable, and rollback-friendly
+  - Project-specific variation may extend the workflow, not weaken core gates
+
+  Implementation context:
+  - Before coding, prefer reading architecture.md, strategy.md, spec.md, plan.md, and relevant tasks.md
+  - Preserve architectural boundaries and avoid out-of-scope changes
+  - Surface assumptions, risks, and open questions explicitly
+
+rules:
+  proposal:
+    - Focus on why, scope, and capability impact; avoid implementation detail
+    - Call out modified capabilities only when behavior or requirements actually change
+  specs:
+    - Every requirement must be testable and use SHALL or MUST language
+    - Every requirement must include at least one #### Scenario
+    - Prefer ADDED requirements unless existing behavior truly changes
+  design:
+    - Include explicit decisions, alternatives considered, risks, trade-offs, and open questions
+    - Create design only for changes with architectural, dependency, security, migration, or ambiguity concerns
+  tasks:
+    - Break work into small, dependency-ordered tasks that fit one implementation session
+    - Each task should imply a verifiable outcome or test angle
+    - Avoid vague tasks that hide multiple concerns
+  tests:
+    - Cover happy paths, edge cases, and failure cases
+    - Keep generated tests useful as implementation context for /apply

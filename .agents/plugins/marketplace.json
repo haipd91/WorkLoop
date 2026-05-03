@@ -1,0 +1,12 @@
+{
+  "name": "Local",
+  "plugins": [
+    {
+      "name": "caveman",
+      "source": {
+        "source": "local",
+        "path": "./plugins/caveman"
+      }
+    }
+  ]
+}

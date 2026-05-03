@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "workflow": "/design",
+  "outputType": "DesignAnalysisResult",
+  "schema": ".codex/schemas/design-analysis-result.schema.json",
+  "agents": [
+    {
+      "name": "Architecture",
+      "definition": ".codex/agents/architecture.md",
+      "role": "Reviews architecture boundaries, layering, dependency direction, shared abstractions, and architectural fit.",
+      "trigger": "core",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md",
+        "design.md"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "core-design-review",
+      "failurePolicy": "blocking"
+    },
+    {
+      "name": "Impact",
+      "definition": ".codex/agents/impact.md",
+      "role": "Reviews impacted files, modules, workflows, upstream/downstream effects, scope expansion risk, and blast radius.",
+      "trigger": "core",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "core-design-review",
+      "failurePolicy": "blocking"
+    },
+    {
+      "name": "Failure Modes",
+      "definition": ".codex/agents/failure-modes.md",
+      "role": "Reviews edge cases, unhappy paths, degraded behavior, recovery concerns, and assumptions that can fail.",
+      "trigger": "core",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md",
+        "tests/**/*"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "core-design-review",
+      "failurePolicy": "blocking"
+    },
+    {
+      "name": "Data Flow",
+      "definition": ".codex/agents/data-flow.md",
+      "role": "Reviews input/output flow, state transitions, contract boundaries, handoff points, and artifact dependencies.",
+      "trigger": "optional: medium or cross-step changes with meaningful state, data, or artifact movement",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md",
+        "design.md"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "optional-design-review",
+      "failurePolicy": "record-risk"
+    },
+    {
+      "name": "Review and Docs",
+      "definition": ".codex/agents/review-docs.md",
+      "role": "Reviews human review points, documentation consistency, workflow updates, rollout notes, and approval dependencies.",
+      "trigger": "optional: medium or cross-cutting changes that update workflow docs, gates, or approval behavior",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "design.md",
+        "relevant workflow docs"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "optional-design-review",
+      "failurePolicy": "record-risk"
+    },
+    {
+      "name": "Security",
+      "definition": ".codex/agents/security.md",
+      "role": "Reviews auth, authz, sensitive data handling, validation gaps, abuse paths, and trust boundaries.",
+      "trigger": "optional: changes touching auth, permissions, sensitive data, validation, or trust boundaries",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "optional-design-review",
+      "failurePolicy": "record-risk"
+    },
+    {
+      "name": "Performance",
+      "definition": ".codex/agents/performance.md",
+      "role": "Reviews latency, throughput, scaling, expensive execution paths, and concurrency pressure.",
+      "trigger": "optional: changes with scale, cost, latency, throughput, or concurrency risk",
+      "requiredInputs": [
+        "proposal.md",
+        "tasks.md"
+      ],
+      "optionalInputs": [
+        "brief.md",
+        "specs/**/*.md"
+      ],
+      "outputType": "DesignAnalysisResult",
+      "parallelGroup": "optional-design-review",
+      "failurePolicy": "record-risk"
+    }
+  ]
+}
