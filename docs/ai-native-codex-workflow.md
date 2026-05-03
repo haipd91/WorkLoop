@@ -199,6 +199,8 @@ review.md -> /archive
     - `blocking_findings: none|present`
     - `reviewed_ref`
     - `reviewed_diff`
+    - `reviewed_implementation_diff`
+    - `reviewed_paths_excluded: openspec/changes/<name>/review.md`
     - `reviewed_at`
   - sections:
     - Findings
@@ -210,6 +212,7 @@ review.md -> /archive
   - `openspec status` chỉ coi `review: done` là `review.md` tồn tại, không phải verdict pass
   - blocking findings => `verdict: fail`
   - skipped tests/missing artifacts phải ghi vào residual risk
+  - stale review check dựa trên implementation fingerprint, exclude đúng `review.md`, không chỉ dựa vào `HEAD == reviewed_ref`
   - review evidence phải durable, không chỉ nằm trong chat.
 
 ### 4.8 `/archive`
@@ -227,7 +230,8 @@ review.md -> /archive
   - move change vào `openspec/changes/archive/YYYY-MM-DD-<name>/`
 - Gate:
   - nếu còn incomplete artifact/task, phải cảnh báo và human confirm.
-  - nếu `review` artifact thiếu/chưa done, thiếu `review.md`, review malformed, stale, verdict không pass, hoặc còn blocking findings thì phải block.
+  - nếu `review` artifact thiếu/chưa done, thiếu `review.md`, review malformed, implementation stale, verdict không pass, hoặc còn blocking findings thì phải block.
+  - commit chỉ thêm/sửa `review.md` sau review không làm stale implementation state.
   - trước khi archive, phải hiện review verdict và residual risk để human accept risk.
 
 ## 5. Specialist Agent Model Cho `/design`
@@ -389,6 +393,7 @@ Một change chỉ được xem là xong khi:
 - Sửa ngoài scope rồi biện minh là cleanup.
 - Đi thẳng từ `/apply` sang `/archive` mà không chạy `/review`.
 - Archive khi `review.md` thiếu, fail, stale, malformed, hoặc còn blocking findings.
+- Coi commit `review.md` là stale implementation change.
 - Archive change khi còn open question chưa được human accept.
 
 ## 10. Ví dụ thực tế

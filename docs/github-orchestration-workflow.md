@@ -119,6 +119,14 @@ Rule:
   - next command
 - Block nếu thiếu issue link hoặc OpenSpec path mà human chưa chấp nhận.
 
+### 6.2.1 `/apply` handoff for GitHub-backed changes
+
+- Khi apply tasks complete cho change có GitHub issue/PR context:
+  - next command phải là `/github:create-pr <change-name>`
+  - không handoff thẳng sang `/review`
+- `/review` chạy sau khi PR đã tồn tại, để review artifact có thể được post/sync vào GitHub source of truth.
+- Local-only exception chỉ dùng `/review` sau `/apply` khi human đã accept rõ việc bỏ qua GitHub issue/PR tracking.
+
 ### 6.3 `/github:post-review`
 
 - Input: PR target + `openspec/changes/<change>/review.md`.
@@ -159,10 +167,15 @@ Rule:
 - Gates:
   - PR review state OK
   - no unresolved blocking comments
-  - checks pass hoặc human accepted bypass
+  - required checks pass hoặc human accepted documented bypass
+  - no required checks/statuses exposed => checks N/A, không block
+  - draft PR ready gates pass => Codex mark ready, không bắt human click
+  - GitHub reviewer approval chỉ bắt buộc khi branch protection/repo policy yêu cầu
+  - human release approval explicit trước merge
   - `review.md` exists
   - `verdict: pass`
   - `blocking_findings: none`
+  - review implementation-state metadata không stale; commit chỉ thêm/sửa `review.md` không block
   - issue linkage known hoặc accepted missing
 - Output:
   - merged PR
@@ -234,7 +247,7 @@ Blocked state vẫn phải có handoff. Không được kết thúc bằng trạ
 
 - Current state: PR merged and issue closed.
 - Done: Merged PR #45 and closed issue #123.
-- Needs human: Confirm archive.
+- Needs human: Run archive when ready.
 - Next command: `/archive issue-123-add-github-orchestration`
 - Blockers: none
 - Links: https://github.com/org/repo/pull/45, https://github.com/org/repo/issues/123

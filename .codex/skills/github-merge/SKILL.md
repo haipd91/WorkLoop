@@ -34,12 +34,18 @@ Before merge, verify:
 
 - PR target is clear.
 - Linked issue is known or missing linkage is explicitly accepted by the human.
+- If the PR is draft and every other gate passes, mark it ready for review through GitHub MCP/plugin before merging.
 - PR has no unresolved blocking comments or requested changes.
-- Required checks/CI are passing, skipped, or explicitly bypassed by the human.
+- Required checks/CI are passing or skipped.
+- If GitHub exposes no required checks or statuses for the PR head commit, treat checks as N/A and record that state instead of blocking.
+- Failing or pending required checks block unless the human explicitly accepts a documented bypass.
+- GitHub reviewer approval is required only when branch protection or explicit repository policy requires it.
+- Human release approval is required before merge unless that approval was already provided in the merge request.
 - `openspec/changes/<change-name>/review.md` exists.
 - `review.md` has:
   - `verdict: pass`
   - `blocking_findings: none`
+  - non-stale implementation-state metadata, allowing review-artifact-only commits after review
 - OpenSpec change path is known for archive handoff.
 
 ## Workflow
@@ -47,10 +53,14 @@ Before merge, verify:
 1. Resolve PR, repository, linked issue, and OpenSpec change.
 2. Read PR review/comment/check state through GitHub MCP/plugin.
 3. Read local `review.md` metadata.
-4. If any gate fails, block and return handoff.
-5. Merge the PR through GitHub MCP/plugin.
-6. Close the linked issue if GitHub did not auto-close it and closing is appropriate.
-7. Return the handoff to `/archive <change-name>`.
+4. Classify checks as passing, blocked, bypassed, or N/A.
+5. If GitHub reviewer approval is required by branch protection or repository policy and missing, block and return handoff.
+6. If any other gate fails, block and return handoff.
+7. If the PR is draft, mark it ready for review through GitHub MCP/plugin.
+8. Confirm explicit human release approval unless already provided in the merge request.
+9. Merge the PR through GitHub MCP/plugin.
+10. Close the linked issue if GitHub did not auto-close it and closing is appropriate.
+11. Return the handoff to `/archive <change-name>`.
 
 ## Handoff
 
@@ -79,8 +89,16 @@ Block instead of merging when:
 
 - PR target is unclear
 - GitHub MCP/plugin is unavailable
-- required checks are failing or unreadable without accepted bypass
+- required checks are failing or pending without accepted documented bypass
+- GitHub reviewer approval is required by branch protection or repository policy and missing
+- human release approval is missing
 - unresolved blocking comments remain
 - requested changes remain
 - local `review.md` is missing, malformed, stale, or failing
 - issue close behavior is unclear and cannot be safely inferred
+
+Do not block solely because:
+
+- the PR is draft after all gates pass; mark it ready instead
+- GitHub exposes no required checks or statuses; record checks as N/A
+- no GitHub approval review exists when branch protection and repo policy do not require one

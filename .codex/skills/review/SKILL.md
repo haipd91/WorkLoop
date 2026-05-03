@@ -58,13 +58,16 @@ git diff --cached
 
 Use the diff to compare implementation against proposal, specs, design, tasks, and tests.
 
-Create a deterministic review fingerprint:
+Create deterministic review fingerprints.
 
 ```bash
 (git diff --binary && git diff --cached --binary) | shasum -a 256
+(git diff --binary -- . ':(exclude)openspec/changes/<name>/review.md' && git diff --cached --binary -- . ':(exclude)openspec/changes/<name>/review.md') | shasum -a 256
 ```
 
-The fingerprint command must still run for an empty diff; empty review state is still a concrete SHA-256 value.
+Use the first fingerprint as the legacy full diff fingerprint. Use the second fingerprint as the reviewed implementation fingerprint. The implementation fingerprint must exclude only `openspec/changes/<name>/review.md`, so committing or editing the review artifact after review does not make the reviewed implementation stale.
+
+The fingerprint commands must still run for an empty diff; empty review state is still a concrete SHA-256 value.
 
 ### 3. Review Stance
 
@@ -94,6 +97,8 @@ verdict: pass
 blocking_findings: none
 reviewed_ref: <git HEAD>
 reviewed_diff: <sha256 fingerprint>
+reviewed_implementation_diff: <sha256 implementation fingerprint>
+reviewed_paths_excluded: openspec/changes/<name>/review.md
 reviewed_at: <ISO-8601 timestamp>
 ```
 
@@ -101,6 +106,7 @@ Allowed values:
 
 - `verdict`: `pass` or `fail`
 - `blocking_findings`: `none` or `present`
+- `reviewed_paths_excluded`: exactly `openspec/changes/<name>/review.md`
 
 Required sections:
 
@@ -145,6 +151,7 @@ After writing `review.md`, summarize:
 - tests/checks run
 - residual risk
 - reviewed ref/diff state
+- reviewed implementation diff and excluded path
 
 If verdict is pass, say:
 
