@@ -10,7 +10,7 @@ metadata:
 
 Review an applied OpenSpec change before archive.
 
-`/review` is a quality gate between `/apply` and `/archive`. It reviews implementation against approved artifacts and writes `openspec/changes/<name>/review.md`.
+`/review` is a quality gate after implementation and PR publication. It reviews implementation against approved artifacts and writes `openspec/changes/<name>/review.md`. For GitHub-backed changes, passed review must be posted to the PR before merge/archive.
 
 ## Input
 
@@ -124,6 +124,8 @@ If no findings exist, say that explicitly under `## Findings`.
 
 If no tests/checks were run, record that under `## Tests Run` and explain under `## Residual Risk`.
 
+If GitHub-backed versus explicit local-only status cannot be determined, record that ambiguity under `## Residual Risk` and route the handoff toward GitHub evidence rather than archive.
+
 ### Legacy Bypass
 
 For a pre-gate legacy change, a maintainer may document bypass in `review.md`. Bypass still requires:
@@ -147,7 +149,9 @@ After writing `review.md`, summarize:
 If verdict is pass, say:
 
 ```text
-Review passed. Run `/archive <name>` when ready.
+Review passed. For GitHub-backed changes, run `/github:post-review <pr>` and then `/github:sync-review <pr>` before merge/archive.
+
+If this is an explicit local-only change, run `/archive <name>` only after the local-only bypass and residual risk are documented.
 ```
 
 If verdict is fail, say:

@@ -284,5 +284,6 @@ apply:
     Read context files, work through pending tasks, mark complete as you go.
     Pause if you hit blockers or need clarification.
   doneInstruction: |
-    All implementation tasks are complete. Run `/review <name>` before archive.
-    Do not archive until review.md exists, verdict is pass, blocking_findings is none, and the review is current.
+    All implementation tasks are complete. For GitHub-backed changes, run `/github:create-pr <name>` before `/review <name>`.
+    For explicit local-only changes, run `/review <name>` and record that GitHub issue/PR evidence was intentionally skipped.
+    Do not archive until review.md exists, verdict is pass, blocking_findings is none, the review is current, and GitHub PR or merge evidence exists unless a documented local-only exception applies.

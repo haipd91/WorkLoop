@@ -50,7 +50,7 @@ Apply tasks from an OpenSpec change.
    - If `state: "blocked"` (missing artifacts): show the missing artifacts and stop. Suggest the exact previous workflow step instead:
      - missing proposal/specs/design/tasks -> run `/propose <name>` or `/design <name>` as appropriate
      - missing tests -> run `/tdd <name>` or get explicit human approval to skip test generation for this change
-   - If `state: "all_done"`: confirm implementation is complete, suggest `/review <name>` before archive
+   - If `state: "all_done"`: confirm implementation is complete. For GitHub-backed changes, suggest `/github:create-pr <name>` before `/review`. For explicit local-only changes, suggest `/review <name>` and record that GitHub issue/PR evidence was intentionally skipped.
    - Otherwise: proceed to implementation
 
 4. **Read context files**
@@ -91,7 +91,7 @@ Apply tasks from an OpenSpec change.
    Display:
    - Tasks completed this session
    - Overall progress: "N/M tasks complete"
-   - If all done: suggest `/review <name>` before archive
+   - If all done: for GitHub-backed changes, suggest `/github:create-pr <name>` before `/review`; for explicit local-only changes, suggest `/review <name>` and record the accepted GitHub evidence bypass.
    - If paused: explain why and wait for guidance
 
 **Output During Implementation**
@@ -122,7 +122,9 @@ Working on task 4/7: <task description>
 - [x] Task 2
 ...
 
-All tasks complete. Run `/review <change-name>` before archive.
+All tasks complete. For GitHub-backed changes, run `/github:create-pr <change-name>` before `/review <change-name>`.
+
+If the human explicitly accepted local-only work, run `/review <change-name>` and record that GitHub issue/PR evidence was intentionally skipped.
 ```
 
 **Output On Pause (Issue Encountered)**
