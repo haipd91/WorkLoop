@@ -66,7 +66,7 @@ review.md -> /archive
   - cần đọc codebase trước khi chốt change
 - Output:
   - không bắt buộc tạo file
-  - có thể chốt insight để chuyển sang `/brief` hoặc `/propose`
+  - có thể chốt insight để chuyển sang `/github:create-issue` trước OpenSpec planning
 - Rủi ro:
   - nếu kéo dài quá lâu mà không tạo artifact, workflow quay lại chat-driven.
 
@@ -342,6 +342,7 @@ review.md -> /archive
 
 ```text
 /explore
+/github:create-issue
 /brief
 /propose <change-name>
 /design <change-name>

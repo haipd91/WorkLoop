@@ -279,7 +279,7 @@ When it feels like things are crystallizing, you might summarize:
 **Open questions**: [if any remain]
 
 **Next steps** (if ready):
-- Create a change proposal
+- Create a GitHub issue with `/github:create-issue` before OpenSpec planning
 - Keep exploring: just keep talking
 ```
 
