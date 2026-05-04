@@ -6,6 +6,13 @@
 
 <!-- Describe what will change. Be specific about new capabilities, modifications, or removals. -->
 
+## Existing Context Reviewed
+
+<!-- List related active specs and active changes reviewed before capability selection.
+     Keep this concise: path, relevant requirement/context, and short impact note.
+     If none were found, state that explicitly. Do not copy full spec content. -->
+- `<path-or-none>`: <brief relevance and impact>
+
 ## Capabilities
 
 ### New Capabilities
