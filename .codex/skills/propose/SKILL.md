@@ -49,7 +49,54 @@ After this, decide whether `/design <name>` is required. Low-risk changes may sk
 
    Check if `openspec/changes/<name>/brief.md` exists. If yes, read it — use its content as additional context when creating all artifacts (problem, goal, scope, constraints, acceptance criteria). Do NOT mention this to the user unless relevant.
 
-4. **Get the artifact build order**
+4. **Discover existing spec context**
+
+   Before creating or updating any planning artifact, run Spec Context Discovery
+   using the user request and `brief.md` if present.
+
+   a. **Extract lightweight search terms**
+   Identify terms from:
+   - domain nouns (e.g., auth, billing, workflow)
+   - user or system actions (e.g., login, export, validate)
+   - entities (e.g., credential, issue, proposal)
+   - UI/API/workflow surfaces (e.g., login screen, `/propose`, endpoint names)
+   - error, validation, security, or trust-boundary terms
+   - likely capability names
+
+   b. **Search active specs first**
+   Search `openspec/specs/**` with the extracted terms. Prefer `rg` when
+   available. Read every matched active spec file that appears relevant before
+   deciding whether a capability is new or modified.
+
+   c. **Search active changes next**
+   Search `openspec/changes/**` with the extracted terms, excluding
+   `openspec/changes/archive/**`. Read related active change artifacts when they
+   may overlap with the requested scope. Treat the current change separately so
+   it is not reported as a conflict with itself.
+
+   d. **Clarify ambiguous overlap**
+   If another active change overlaps the same domain, capability, or
+   requirements, ask whether to continue the existing change, merge scope, or
+   proceed with the new change. Do not silently create conflicting planning
+   artifacts.
+
+   e. **Search archive only when needed**
+   Do not search `openspec/changes/archive/**` by default. Search archived
+   changes only when active specs and active changes are insufficient,
+   conflicting, or missing rationale needed for a safe proposal. If archive
+   context influences the artifacts, record why it was needed.
+
+   f. **Use discovery for artifact generation**
+   Use discovered context to decide:
+   - existing capability vs new capability
+   - `ADDED`, `MODIFIED`, `REMOVED`, or `RENAMED` delta operation
+   - whether human clarification is needed before writing artifacts
+
+   Record concise discovery evidence in generated artifacts, preferably in
+   `proposal.md` under `Existing Context Reviewed`: related active specs,
+   related active changes, and short impact notes. Do not copy full spec content.
+
+5. **Get the artifact build order**
 
    ```bash
    openspec status --change "<name>" --json
@@ -59,7 +106,7 @@ After this, decide whether `/design <name>` is required. Low-risk changes may sk
    - artifact IDs and dependency order
    - `artifacts`: list of all artifacts with their status and dependencies
 
-4. **Create planning artifacts in sequence**
+6. **Create planning artifacts in sequence**
 
    Use the **TodoWrite tool** to track progress through the artifacts.
 
@@ -97,12 +144,12 @@ After this, decide whether `/design <name>` is required. Low-risk changes may sk
    - Use **AskUserQuestion tool** to clarify
    - Then continue with creation
 
-5. **Show final status**
+7. **Show final status**
    ```bash
    openspec status --change "<name>"
    ```
 
-6. **Decide the next handoff**
+8. **Decide the next handoff**
 
    Evaluate whether the change needs the `/design` review step.
 
@@ -141,6 +188,9 @@ After completing all artifacts, summarize:
 
 - Follow the `instruction` field from `openspec instructions` for each artifact type
 - The schema defines what each artifact should contain - follow it
+- Run Spec Context Discovery before creating or updating planning artifacts
+- Use discovered active specs and active changes for capability selection and delta operation choice
+- Record related specs and active changes concisely; do not paste full matched specs into artifacts
 - Read dependency artifacts for context before creating new ones
 - Use `template` as the structure for your output file - fill in its sections
 - **IMPORTANT**: `context` and `rules` are constraints for YOU, not content for the file
@@ -153,6 +203,8 @@ After completing all artifacts, summarize:
 - Do not suggest `/apply` directly after `/propose`
 - Always decide and explain whether `/design` review is required or can be skipped
 - Do not create tests from `/propose`; use `/tdd`
+- Do not generate planning artifacts before searching relevant active specs and active changes
+- Do not search archived changes by default; use archive only for conflict or rationale gaps
 - Always read dependency artifacts before creating a new one
 - If context is critically unclear, ask the user - but prefer making reasonable decisions to keep momentum
 - If a change with that name already exists, ask if user wants to continue it or create a new one
