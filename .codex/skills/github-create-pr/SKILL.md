@@ -31,7 +31,7 @@ If issue link or OpenSpec change path cannot be identified, ask the human or blo
 
 ## Workflow
 
-1. Resolve local repository, current branch, and remote.
+1. Resolve local repository, current branch, default base branch, and remote.
 2. Resolve issue link:
    - from user input
    - from branch name
@@ -44,9 +44,30 @@ If issue link or OpenSpec change path cannot be identified, ask the human or blo
    - completed tasks
    - tests or verification evidence
    - residual risk
-5. Push branch only if the user requested publishing and the local git state is ready.
-6. Create or update a draft PR through GitHub MCP/plugin.
-7. Return the handoff.
+5. Resolve the PR head branch:
+   - If current branch is `main` or the default base branch, derive a branch name before staging or committing.
+   - Preferred format: `codex/issue-<number>-<short-change-slug>`.
+   - If no issue number exists but missing linkage was explicitly accepted, use `codex/<change-slug>`.
+   - If the derived branch already exists and points to the intended work, switch to it.
+   - If the derived branch exists but points to unrelated work, block instead of force-updating it.
+   - If current branch is a non-main work branch selected by the human, preserve it as the PR head branch unless it is unsafe to publish.
+6. Stage, commit, and push only when scope is clear:
+   - Stage only files that belong to the resolved OpenSpec change and requested implementation.
+   - Do not stage unrelated dirty or untracked files.
+   - Create an intentional commit after verification and residual risk are known.
+   - Push the PR head branch after the commit succeeds.
+7. Create or update a draft PR through GitHub MCP/plugin.
+8. Return the handoff.
+
+## Branch and Publish Rules
+
+- Starting from `main` or the default base branch is supported. It is not a blocker by itself.
+- Do not publish directly from `main` or the default base branch.
+- Create or switch to the safe `codex/` work branch before staging, committing, pushing, or creating the PR.
+- Preserve an existing non-main work branch when the human already selected it.
+- If branch safety is unclear, block with a handoff before any commit or push.
+- If unrelated changes exist and cannot be separated safely, block with a handoff.
+- If unrelated changes can be clearly separated, stage explicit paths only and mention ignored local changes in the handoff.
 
 ## PR Body Shape
 
@@ -109,4 +130,8 @@ Block instead of guessing when:
 - OpenSpec change path is missing
 - GitHub MCP/plugin is unavailable
 - branch cannot be published safely
+- current branch is `main` or the default base branch and a safe `codex/` branch cannot be created or selected
+- derived `codex/` branch exists but points to unrelated work
+- dirty worktree contains unrelated changes that cannot be separated safely
+- no scoped local changes are available to commit or PR body would misrepresent the work
 - PR body would omit verification or residual risk
