@@ -31,7 +31,14 @@ The PR implementation matches the approved artifacts:
 
 - Keyword-based discovery can still miss synonyms or domain-specific names. The implemented guidance mitigates this by requiring multiple term classes and clarification when capability mapping is ambiguous.
 - The local worktree contains unrelated unstaged changes in `.codex/skills/explore/SKILL.md` and `docs/ai-native-codex-workflow.md`. They are not part of PR #8, but the required review fingerprint commands include current local dirty state because the review contract excludes only this `review.md` path.
-- PR #8 is still draft and must be posted/synced through the GitHub review workflow before merge/archive.
+- PR #8 was verified as merged into `main` on 2026-05-04 with merge commit `72e13a5`; it closes issue #7.
+
+## GitHub Delivery Evidence
+
+- PR: https://github.com/haipd91/WorkLoop/pull/8
+- Issue: https://github.com/haipd91/WorkLoop/issues/7
+- Merge record: PR #8 merged 2 commits from `codex/issue-7-spec-context-discovery-propose` into `main` on 2026-05-04.
+- Merge commit: `72e13a5`
 
 ## Verdict
 
